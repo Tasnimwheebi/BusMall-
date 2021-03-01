@@ -97,6 +97,8 @@ function handelClick( event ) {
       console.log( Bus.all );
 
     }
+  } else {
+    renderChart();
   }
 }
 imgSection.addEventListener( 'click', handelClick );
@@ -127,4 +129,49 @@ renderNewProducts();
 
 function randomNumber( min, max ) {
   return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+}
+function renderChart() {
+
+  let nameArray = [];
+  let clicksArray = [];
+  let shownArray = [];
+
+  for( let i = 0; i < Bus.all.length; i++ ) {
+    nameArray.push( Bus.all[i].name );
+    clicksArray.push( Bus.all[i].clicks );
+    shownArray.push( Bus.all[i].shown );
+  }
+
+  let ctx = document.getElementById( 'myChart' ).getContext( '2d' );
+  new Chart ( ctx, {
+    type: 'bar',
+    data: {
+      labels: nameArray,
+      datasets: [
+        {
+          label: '# of Votes',
+          data: clicksArray,
+          backgroundColor: 'rgba(218, 7, 74, 1)',
+          borderColor: 'rgba(224, 82, 129, 1)',
+          borderWidth: 3
+        },
+        {
+          label: '# of shown',
+          data: shownArray,
+          backgroundColor: 'rgba(155, 82, 224, 1)',
+          borderColor: 'rgba(177, 82, 224, 1)',
+          borderWidth: 3
+        }
+      ]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  } );
 }
