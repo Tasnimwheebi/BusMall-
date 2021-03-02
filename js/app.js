@@ -40,6 +40,8 @@ function Bus( name , img ) {
   this.clicks = 0;
   this.shown = 0;
   Bus.all.push( this );
+
+  
 }
 Bus.all = [];
 Bus.counter = 0;
@@ -55,6 +57,7 @@ function getName( fileName ) {
 let indexs = [];
 function renderNewProducts() {
 
+  getResult.innerHTML = '';
   let leftIndex = randomNumber( 0, Bus.all.length - 1 );
   leftImg.src = Bus.all[leftIndex].img;
   leftImg.alt = Bus.all[leftIndex].name;
@@ -109,6 +112,7 @@ function handelClick( event ) {
 
     }
   } else {
+    localStorage.setItem( 'results', JSON.stringify( Bus.all ) );
     renderChart();
   }
 }
@@ -196,3 +200,15 @@ function renderChart() {
     }
   } );
 }
+
+function getData() {
+  const data = localStorage.getItem( 'results' );
+  if( data ) {
+    const objData = JSON.parse( data );
+    Bus.all = objData;
+    renderNewProducts();
+  }
+}
+button.addEventListener( 'click', handelClick );
+getData();
+renderNewProducts();
