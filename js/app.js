@@ -52,23 +52,34 @@ function getName( fileName ) {
   return fileName.split( '.' ).slice( 0, -1 ).join( '.' );
 }
 
+let indexs = [];
 function renderNewProducts() {
+
   let leftIndex = randomNumber( 0, Bus.all.length - 1 );
   leftImg.src = Bus.all[leftIndex].img;
   leftImg.alt = Bus.all[leftIndex].name;
-  leftImgIndex = leftIndex;
-  let middleIndex;
-  let rightIndex;
 
+  leftImgIndex = leftIndex;
+
+  indexs.push( leftIndex );
+  let middleIndex;
   do {
     middleIndex = randomNumber( 0, Bus.all.length - 1 );
-    rightIndex = randomNumber( 0, Bus.all.length - 1 );
-  } while ( ( leftIndex === middleIndex ) || ( leftIndex === rightIndex ) || ( rightIndex === middleIndex ) );
 
+  } while ( leftIndex === middleIndex );
+
+  indexs.push( middleIndex );
   middleImg.src = Bus.all[middleIndex].img;
   middleImg.alt = Bus.all[middleIndex].name;
   middleImgIndex = middleIndex;
 
+
+  let rightIndex;
+  do {
+    rightIndex = randomNumber( 0, Bus.all.length - 1 );
+  } while ( ( leftIndex === rightIndex ) || ( rightIndex === middleIndex ) );
+
+  indexs.push( rightIndex );
   rightImg.src = Bus.all[rightIndex].img;
   rightImg.alt = Bus.all[rightIndex].name;
   rightImgIndex = rightIndex;
@@ -77,8 +88,8 @@ function renderNewProducts() {
   Bus.all[leftIndex].shown++;
   Bus.all[middleIndex].shown++;
   Bus.all[rightIndex].shown++;
-}
 
+}
 function handelClick( event ) {
   if ( Bus.counter < clickCounter ) {
     const clickedElement = event.target;
@@ -127,8 +138,18 @@ function getResult() {
 
 renderNewProducts();
 
+// function randomNumber( min, max ) {
+//   return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+// }
 function randomNumber( min, max ) {
-  return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+
+  let index2 = Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+  for( let i = 0;i < indexs.length;i++ ){
+    if ( index2 === indexs[i] ){
+      index2 = Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+    }
+  }return( index2 );
+
 }
 function renderChart() {
 
